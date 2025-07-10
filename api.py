@@ -1,6 +1,8 @@
 # z pliku config.py zaimportuj strukturę Settings
 # from datetime import datetime
 import datetime
+from tools import wind_speed
+from tools import temp_c
 
 from config import Settings
 import requests
@@ -13,13 +15,13 @@ def fetch_weather():
         weather = response.json()
 
         data = {
-            "Odczuwalna": weather["main"]["feels_like"],
+            "Odczuwalna": temp_c(weather["main"]["feels_like"]),
             "Ciśnienie": weather["main"]["pressure"],
             "Wilgotność": weather["main"]["humidity"],
-            "Zwykła temperatura": weather["main"]["temp"],
+            "Zwykła temperatura": temp_c(weather["main"]["temp"]),
             "Opis pogody": weather["weather"][0]["description"],
             "Miejsce": weather["name"],
-            "Prędkość wiatru": weather["wind"]["speed"],
+            "Prędkość wiatru": wind_speed(weather["wind"]["speed"]),
             # "Data pomiaru": datetime.fromtimestamp(weather["dt"]).strftime("%d/%m/%Y %H:%M:%S")
             "Data pomiaru": datetime.datetime.now()
         }
@@ -27,3 +29,5 @@ def fetch_weather():
 
     except:
         print("Wystąpił błąd")
+
+# print(fetch_weather())
